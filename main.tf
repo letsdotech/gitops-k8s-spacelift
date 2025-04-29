@@ -15,12 +15,11 @@ provider "kubernetes" {
 
 data "google_client_config" "current" {}
 
-# Calculator Server Deployment
-resource "kubernetes_deployment" "calculator_server" {
+resource "kubernetes_deployment" "sample_app" {
   metadata {
-    name = "calculator-server"
+    name = "sample-app"
     labels = {
-      app = "calculator-server"
+      app = "sample-app"
     }
   }
 
@@ -29,45 +28,23 @@ resource "kubernetes_deployment" "calculator_server" {
 
     selector {
       match_labels = {
-        app = "calculator-server"
+        app = "sample-app"
       }
     }
 
     template {
       metadata {
         labels = {
-          app = "calculator-server"
+          app = "sample-app"
         }
       }
 
       spec {
-        node_selector = {
-          "kubernetes.io/arch" = "amd64"
-        }
-        
         container {
-          name  = "calculator-server"
-          image = "letsdotech/calculator-server:v1.0.3"
+          name  = "sample-app"
+          image = "nginx:latest"
           port {
-            container_port = 8080
-          }
-
-          readiness_probe {
-            http_get {
-              path = "/health"
-              port = 8080
-            }
-            initial_delay_seconds = 5
-            period_seconds        = 10
-          }
-
-          liveness_probe {
-            http_get {
-              path = "/health"
-              port = 8080
-            }
-            initial_delay_seconds = 15
-            period_seconds        = 20
+            container_port = 80
           }
 
           resources {
@@ -86,121 +63,25 @@ resource "kubernetes_deployment" "calculator_server" {
   }
 }
 
-# Calculator Server Service
-resource "kubernetes_service" "calculator_server" {
+resource "kubernetes_service" "sample_app" {
   metadata {
-    name = "calculator-server"
+    name = "sample-app"
     labels = {
-      app = "calculator-server"
+      app = "sample-app"
     }
   }
 
   spec {
     type = "ClusterIP"
     port {
-      port        = 8080
-      target_port = 8080
+      port        = 80
+      target_port = 80
       protocol    = "TCP"
       name        = "http"
     }
 
     selector = {
-      app = "calculator-server"
-    }
-  }
-}
-
-# Dummy Client Deployment
-resource "kubernetes_deployment" "dummy_client" {
-  metadata {
-    name = "dummy-client"
-    labels = {
-      app = "dummy-client"
-    }
-  }
-
-  spec {
-    replicas = 2
-
-    selector {
-      match_labels = {
-        app = "dummy-client"
-      }
-    }
-
-    template {
-      metadata {
-        labels = {
-          app = "dummy-client"
-        }
-      }
-
-      spec {
-        node_selector = {
-          "kubernetes.io/arch" = "amd64"
-        }
-        
-        container {
-          name  = "dummy-client"
-          image = "letsdotech/dummy-client:v1.0.2"
-          port {
-            container_port = 8080
-          }
-
-          readiness_probe {
-            http_get {
-              path = "/health"
-              port = 8080
-            }
-            initial_delay_seconds = 5
-            period_seconds        = 10
-          }
-
-          liveness_probe {
-            http_get {
-              path = "/health"
-              port = 8080
-            }
-            initial_delay_seconds = 15
-            period_seconds        = 20
-          }
-
-          resources {
-            requests = {
-              cpu    = "100m"
-              memory = "128Mi"
-            }
-            limits = {
-              cpu    = "200m"
-              memory = "256Mi"
-            }
-          }
-        }
-      }
-    }
-  }
-}
-
-# Dummy Client Service
-resource "kubernetes_service" "dummy_client" {
-  metadata {
-    name = "dummy-client"
-    labels = {
-      app = "dummy-client"
-    }
-  }
-
-  spec {
-    type = "ClusterIP"
-    port {
-      port        = 8080
-      target_port = 8080
-      protocol    = "TCP"
-      name        = "http"
-    }
-
-    selector = {
-      app = "dummy-client"
+      app = "sample-app"
     }
   }
 } 
