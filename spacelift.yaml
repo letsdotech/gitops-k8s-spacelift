@@ -5,8 +5,6 @@ stacks:
     branch: main
     directory: .
     environment:
-      KUBERNETES_HOST: ${KUBERNETES_HOST}
-      KUBERNETES_CLUSTER_CA_CERTIFICATE: ${KUBERNETES_CLUSTER_CA_CERTIFICATE}
       GOOGLE_APPLICATION_CREDENTIALS: /tmp/spacelift-key.json
       GOOGLE_PROJECT: ldt-contact-form
       GOOGLE_REGION: europe-central2
