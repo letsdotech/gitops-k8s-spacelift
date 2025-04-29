@@ -8,7 +8,13 @@ terraform {
 }
 
 provider "kubernetes" {
-  config_path = var.kube_config_path
+  host                   = var.kubernetes_host
+  cluster_ca_certificate = base64decode(var.kubernetes_cluster_ca_certificate)
+  exec {
+    api_version = "client.authentication.k8s.io/v1beta1"
+    command     = "gke-gcloud-auth-plugin"
+    args        = []
+  }
 }
 
 resource "kubernetes_deployment" "sample_app" {
