@@ -6,23 +6,12 @@ stacks:
     directory: .
     environment:
       GOOGLE_APPLICATION_CREDENTIALS: /tmp/spacelift-key.json
-      GOOGLE_PROJECT: ldt-contact-form
-      GOOGLE_REGION: europe-central2
     opentofu:
       version: 1.6.0
       workspace: default
     before_init:
-      - echo "Installing GKE authentication plugin..."
-      - curl -sSL https://dl.k8s.io/release/v1.28.0/bin/linux/amd64/kubectl -o /usr/local/bin/kubectl
-      - chmod +x /usr/local/bin/kubectl
-      - curl -sSL https://sdk.cloud.google.com > /tmp/gcloud-install.sh
-      - bash /tmp/gcloud-install.sh --disable-prompts --install-dir=/usr/local
-      - /usr/local/google-cloud-sdk/bin/gcloud components install gke-gcloud-auth-plugin
       - echo "Setting up Google Cloud credentials..."
       - echo "${GOOGLE_CREDENTIALS}" > /tmp/spacelift-key.json
-      - /usr/local/google-cloud-sdk/bin/gcloud auth activate-service-account --key-file=/tmp/spacelift-key.json
-      - /usr/local/google-cloud-sdk/bin/gcloud config set project ldt-contact-form
-      - /usr/local/google-cloud-sdk/bin/gcloud config set compute/region europe-central2
       - echo "Initializing Kubernetes deployment..."
     after_apply:
       - echo "Deployment completed successfully!" 

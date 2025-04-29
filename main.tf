@@ -10,12 +10,10 @@ terraform {
 provider "kubernetes" {
   host                   = var.kubernetes_host
   cluster_ca_certificate = base64decode(var.kubernetes_cluster_ca_certificate)
-  exec {
-    api_version = "client.authentication.k8s.io/v1beta1"
-    command     = "gke-gcloud-auth-plugin"
-    args        = []
-  }
+  token                  = data.google_client_config.current.access_token
 }
+
+data "google_client_config" "current" {}
 
 resource "kubernetes_deployment" "sample_app" {
   metadata {
