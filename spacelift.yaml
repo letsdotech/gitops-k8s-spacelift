@@ -10,7 +10,7 @@ stacks:
       version: 1.6.0
       workspace: default
       var_files:
-        - terraform.tfvars
+        - main.tfvars
     before_init:
       - echo "Setting up Google Cloud credentials..."
       - echo "${GOOGLE_CREDENTIALS}" > /tmp/spacelift-key.json
@@ -28,7 +28,7 @@ stacks:
       version: 1.6.0
       workspace: default
       var_files:
-        - environments/dev.tfvars
+        - dev.tfvars
     before_init:
       - echo "Setting up Google Cloud credentials..."
       - echo "${GOOGLE_CREDENTIALS}" > /tmp/spacelift-key.json
