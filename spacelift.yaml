@@ -3,7 +3,7 @@ stacks:
   - name: k8s-gitops-demo
     repository: ${GIT_REPO_URL}
     branch: main
-    directory: manifests
+    directory: .
     environment:
       KUBE_CONFIG: ${KUBE_CONFIG}
     opentofu:
