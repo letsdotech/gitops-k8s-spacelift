@@ -6,8 +6,8 @@ stacks:
     directory: manifests
     environment:
       KUBE_CONFIG: ${KUBE_CONFIG}
-    terraform:
-      version: 1.0.0
+    opentofu:
+      version: 1.6.0
       workspace: default
     before_init:
       - echo "Initializing Kubernetes deployment..."
