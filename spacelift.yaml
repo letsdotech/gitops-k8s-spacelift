@@ -1,0 +1,15 @@
+version: 1
+stacks:
+  - name: k8s-gitops-demo
+    repository: ${GIT_REPO_URL}
+    branch: main
+    directory: manifests
+    environment:
+      KUBE_CONFIG: ${KUBE_CONFIG}
+    terraform:
+      version: 1.0.0
+      workspace: default
+    before_init:
+      - echo "Initializing Kubernetes deployment..."
+    after_apply:
+      - echo "Deployment completed successfully!" 
