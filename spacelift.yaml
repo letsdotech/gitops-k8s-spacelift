@@ -1,6 +1,6 @@
 version: 1
 stacks:
-  - name: k8s-gitops-demo
+  - name: k8s-gitops-demo-prod
     repository: ${GIT_REPO_URL}
     branch: main
     directory: .
@@ -9,6 +9,26 @@ stacks:
     opentofu:
       version: 1.6.0
       workspace: default
+      var_files:
+        - terraform.tfvars
+    before_init:
+      - echo "Setting up Google Cloud credentials..."
+      - echo "${GOOGLE_CREDENTIALS}" > /tmp/spacelift-key.json
+      - echo "Initializing Kubernetes deployment..."
+    after_apply:
+      - echo "Deployment completed successfully!"
+
+  - name: k8s-gitops-demo-dev
+    repository: ${GIT_REPO_URL}
+    branch: dev
+    directory: .
+    environment:
+      GOOGLE_APPLICATION_CREDENTIALS: /tmp/spacelift-key.json
+    opentofu:
+      version: 1.6.0
+      workspace: default
+      var_files:
+        - environments/dev.tfvars
     before_init:
       - echo "Setting up Google Cloud credentials..."
       - echo "${GOOGLE_CREDENTIALS}" > /tmp/spacelift-key.json
