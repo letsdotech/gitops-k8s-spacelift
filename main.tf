@@ -41,11 +41,33 @@ resource "kubernetes_deployment" "calculator_server" {
       }
 
       spec {
+        node_selector = {
+          "kubernetes.io/arch" = "amd64"
+        }
+        
         container {
           name  = "calculator-server"
           image = "letsdotech/calculator-server:v1.0.4"
           port {
             container_port = 8080
+          }
+
+          readiness_probe {
+            http_get {
+              path = "/health"
+              port = 8080
+            }
+            initial_delay_seconds = 5
+            period_seconds        = 10
+          }
+
+          liveness_probe {
+            http_get {
+              path = "/health"
+              port = 8080
+            }
+            initial_delay_seconds = 15
+            period_seconds        = 20
           }
 
           resources {
@@ -114,11 +136,33 @@ resource "kubernetes_deployment" "dummy_client" {
       }
 
       spec {
+        node_selector = {
+          "kubernetes.io/arch" = "amd64"
+        }
+        
         container {
           name  = "dummy-client"
           image = "letsdotech/dummy-client:v1.0.3"
           port {
             container_port = 8080
+          }
+
+          readiness_probe {
+            http_get {
+              path = "/health"
+              port = 8080
+            }
+            initial_delay_seconds = 5
+            period_seconds        = 10
+          }
+
+          liveness_probe {
+            http_get {
+              path = "/health"
+              port = 8080
+            }
+            initial_delay_seconds = 15
+            period_seconds        = 20
           }
 
           resources {
