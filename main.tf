@@ -47,7 +47,7 @@ resource "kubernetes_deployment" "calculator_server" {
         
         container {
           name  = "calculator-server"
-          image = "letsdotech/calculator-server:v1.0.4"
+          image = "letsdotech/calculator-server:v1.0.3"
           port {
             container_port = 8080
           }
@@ -142,7 +142,7 @@ resource "kubernetes_deployment" "dummy_client" {
         
         container {
           name  = "dummy-client"
-          image = "letsdotech/dummy-client:v1.0.3"
+          image = "letsdotech/dummy-client:v1.0.2"
           port {
             container_port = 8080
           }
